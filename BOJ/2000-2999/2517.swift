@@ -30,22 +30,16 @@ class FenwickTree {
 }
 
 var arr = Array(repeating: (1000000001, 1000000001), count: 500001)
-var dict = Array(repeating: -1, count: 500001)
 var rank = Array(repeating: -1, count: 500001)
 
 let N = Int(readLine()!)!
-for i in 0..<N { arr[i] = (i, Int(readLine()!)!) }
+for i in 0..<N { arr[i] = (i + 1, Int(readLine()!)!) }
 
-// 좌표 압축 : 상대적인 실력만 필요하므로 1~N 범위로 압축
-arr.sort(by: { $0.1 < $1.1 })
-for i in 0..<N { arr[i] = (arr[i].0, i+1) }
-arr.sort(by: { $0.0 < $1.0 })
-
-for i in 0..<N { dict[arr[i].1] = i + 1 }
+let sortedArr = arr.sorted(by: { $0.1 < $1.1 })
 
 let fwt = FenwickTree()
-for i in 1...N {
-    let index = dict[i]
+for i in 0..<N {
+    let index = sortedArr[i].0
     rank[index] = fwt.sum(to: index - 1) + 1    // 최선의 등수 = i보다 앞에 있으면서 i보다 큰 것의 개수 + 1
     fwt.add(at: index, val: -1)
 }
