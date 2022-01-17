@@ -9,7 +9,7 @@ while T > 0 {
     let p = readLine()!
     let n = Int(readLine()!)!
     let arr = readLine()!
-            .replacingOccurrences(of: "[\\[\\]^+]", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "[\\[\\]]", with: "", options: .regularExpression)
             .split(separator: ",")
             .map{ Int(String($0))! }
     
