@@ -55,17 +55,10 @@ func solution() -> String {
             union(a: whoKnowsTruth[i], b: whoKnowsTruth[i+1])
         }
         
-        for party in parties {
-            var sayTruth = false
-            
-            for participant in party {
-                if find(participant) == find(whoKnowsTruth.first!) {
-                    sayTruth = true            // 진실을 알아야 하는 사람이 있으면 진실을 말해야 함
-                    break
-                }
+        for party in parties {                  // 각 파티의 참석자들이 진실을 알아야하는 집단인지 체크
+            if find(party.first!) != find(whoKnowsTruth.first!) {
+                result += 1
             }
-            
-            if !sayTruth { result += 1 }
         }
     } else {
         result = M
