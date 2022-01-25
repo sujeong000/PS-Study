@@ -38,10 +38,12 @@ func solution() {
         union(a: A, b: B)
     }
     
-    var pairs = (1...N).map{ ($0, find($0)) }   // (i, parents[i])
-    pairs.sort(by: { $0.1 < $1.1 })             // parent 기준으로 오름차순 정렬
-    
-    print(pairs[0].0, pairs.first(where: {$0.1 != pairs[0].1 })!.0)
+    for i in 2...N {
+        if find(1) != find(i) {
+            print(1, i)
+            break
+        }
+    }
 }
 
 solution()
