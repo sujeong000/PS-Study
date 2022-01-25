@@ -7,6 +7,10 @@ var home = Array(repeating: [Int](), count: 17)
 typealias Point = (row: Int, col: Int)
 
 struct Pipe {
+    enum Direction: Int {
+        case vertical = 0, horizontal, diagonal
+    }
+    
     let pos: Point
     let direction: Direction
     
@@ -64,10 +68,6 @@ struct Pipe {
     
         return directions.map{ Pipe(pos: endPoint, direction: $0)}
     }
-}
-
-enum Direction: Int {
-    case vertical = 0, horizontal, diagonal
 }
 
 func dp(pipe: Pipe) -> Int {        // dp(pipe) = pipe의 한쪽 끝을 (N,N)으로 옮기는 방법의 수
