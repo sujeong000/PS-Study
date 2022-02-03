@@ -3,7 +3,7 @@ import Foundation
 var isPrime = Array(repeating: true, count: 4_000_001)
 var primeNumbers = [Int]()
 
-func getPrimeNumber() {
+func getPrimeNumbers() {
     isPrime[1] = false
     
     for i in 2...4_000_000 {
@@ -21,26 +21,21 @@ func getPrimeNumber() {
     }
 }
 
-func numberOfCases(_ n: Int) -> Int {
-    var count = isPrime[n] ? 1 : 0
-    var i = 0, j = 1, sum = primeNumbers[i] + primeNumbers[j]
+func countNumberOfCases(_ n: Int) -> Int {
+    var s = 0, e = 0, sum = 2, count = 0
     
-    while i < j && j < primeNumbers.count {
-        if sum >= n {
-            if sum == n { count += 1 }
-            
-            i += 1
-            sum -= primeNumbers[i-1]
-            
-            if i == j {
-                j += 1
-                guard j < primeNumbers.count else { break }
-                sum += primeNumbers[j]
-            }
+    while true {
+        if sum > n {
+            sum -= primeNumbers[s]
+            s += 1
+        } else if sum == n {
+            count += 1
+            sum -= primeNumbers[s]
+            s += 1
         } else {
-            j += 1
-            guard j < primeNumbers.count else { break }
-            sum += primeNumbers[j]
+            guard e < primeNumbers.count-1 else { break }
+            e += 1
+            sum += primeNumbers[e]
         }
     }
     
@@ -50,8 +45,8 @@ func numberOfCases(_ n: Int) -> Int {
 func solution() {
     let N = Int(readLine()!)!
     
-    getPrimeNumber()
-    print(numberOfCases(N))
+    getPrimeNumbers()
+    print(countNumberOfCases(N))
 }
 
 solution()
