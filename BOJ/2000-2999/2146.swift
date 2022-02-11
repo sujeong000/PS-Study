@@ -2,9 +2,8 @@ import Foundation
 
 var N = 0
 var map = Array(repeating: [Int](), count: 100)
-var visit = Array(repeating: Array(repeating: false, count: 100), count: 100)
 
-typealias Pair = (row: Int, col: Int, dist: Int)
+typealias Pair = (row: Int, col: Int)
 
 struct Queue {
     var queue = [Pair]()
@@ -25,73 +24,58 @@ struct Queue {
     }
 }
 
-func BFS(row: Int, col: Int) -> Int {
-    visit = Array(repeating: Array(repeating: false, count: N), count: N)
+func BFS(row: Int, col: Int, num: Int) {
+    var queue = Queue()
+    queue.insert(Pair(row, col))
+    map[row][col] = num
     
-    var zeroQueue = Queue()     // 육지에 인접한 바다들을 넣음
-    var oneQueue = Queue()
-    oneQueue.insert(Pair(row, col, 0))
-    visit[row][col] = true
-    
-    while !oneQueue.isEmpty {
-        let current = oneQueue.popFront()
+    while !queue.isEmpty {
+        let current = queue.popFront()
         let r = current.row
         let c = current.col
         
-        let adjacents = [Pair(r+1,c,1), Pair(r-1,c,1), Pair(r,c-1,1), Pair(r,c+1,1)].filter {
-            (0..<N) ~= $0.0 && (0..<N) ~= $0.1
-        }
+        let adjacents = [Pair(r+1,c), Pair(r-1,c), Pair(r,c-1), Pair(r,c+1)]
         for adj in adjacents {
-            guard !visit[adj.row][adj.col] else { continue }
+            guard (0..<N) ~= adj.row,
+                  (0..<N) ~= adj.col,
+                  map[adj.row][adj.col] == 1 else { continue }
             
-            if map[adj.row][adj.col] == 1 {
-                visit[adj.row][adj.col] = true
-                oneQueue.insert(adj)
-            } else {
-                visit[adj.row][adj.col] = true
-                zeroQueue.insert(adj)
-            }
+            queue.insert(adj)
+            map[adj.row][adj.col] = num
         }
     }
-    
-    var minLength = 987654321
-    
-    while !zeroQueue.isEmpty {  // 육지와 가장 인접한 바다부터 BFS시작, 다른 대륙까지의 거리를 측정
-        let current = zeroQueue.popFront()
-        let r = current.row
-        let c = current.col
-        let d = current.dist
-        
-        let adjacents = [Pair(r+1,c,d+1), Pair(r-1,c,d+1), Pair(r,c-1,d+1), Pair(r,c+1,d+1)].filter {
-            (0..<N) ~= $0.0 && (0..<N) ~= $0.1
-        }
-        for adj in adjacents {
-            guard !visit[adj.row][adj.col] else { continue }
-            
-            if map[adj.row][adj.col] == 0 {
-                visit[adj.row][adj.col] = true
-                if adj.dist < minLength {
-                    zeroQueue.insert(adj)
-                }
-            } else {
-                visit[adj.row][adj.col] = true
-                minLength = min(minLength, d)
-            }
-        }
-    }
-    
-    return minLength
 }
 
-func findMinLength() -> Int {
-    var minLength = 987654321
+func unionIsland() {
+    var num = 2
     
     for i in 0..<N {
         for j in 0..<N {
-            guard map[i][j] == 1,
-                  i == 0 || map[i-1][j] == 0 || j == 0 || map[i][j-1] == 0 else { continue }
+            guard map[i][j] == 1 else { continue }
+            BFS(row: i, col: j, num: num)
+            num += 1
+        }
+    }
+}
+
+func findMinLength() -> Int {
+    unionIsland()
+
+    var minLength = 987654321
+    
+    for i in 0..<N*N-1 {
+        let r1 = i / N, c1 = i % N
+        
+        guard map[r1][c1] != 0 else { continue }
+        
+        for j in i+1..<N*N {
+            let r2 = j / N, c2 = j % N
             
-            minLength = min(minLength, BFS(row: i, col: j))
+            guard map[r2][c2] != 0,
+                  map[r2][c2] != map[r1][c1] else { continue }
+            
+            let length = abs(r1 - r2) + abs(c1 - c2) - 1
+            minLength = min(minLength, length)
         }
     }
     
