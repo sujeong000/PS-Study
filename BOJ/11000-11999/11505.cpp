@@ -35,13 +35,6 @@ long long pmul(int pos) {
     return ret;
 }
 
-void divide(int pos, int val) {
-    while (pos < tree.size()) {
-        tree[pos] = tree[pos] * moduloInverse(val) % MOD;
-        pos += (pos & -pos);
-    }
-}
-
 void multiply(int pos, int val) {
     while (pos < tree.size()) {
         tree[pos] = tree[pos] * val % MOD;
@@ -99,7 +92,7 @@ int main()
             }
             else {
                 if (psum(b) - psum(b-1) > 0) add(b, -1);
-                divide(b, arr[b]);
+                multiply(b, moduloInverse(arr[b]));
                 multiply(b, c);
                 arr[b] = c; 
             }
