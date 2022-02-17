@@ -7,6 +7,19 @@ int N;
 int max_result = INT_MIN;
 char mexp[19];
 
+int calc(int a, char op, int b) {
+    switch (op) {
+        case '+':
+            return a + b;
+        case '-':
+            return a - b;
+        case '*':
+            return a * b;
+    }
+    
+    return 0;
+}
+
 void brute_force(int idx, int val) {
     if (idx >= N) {
         max_result = max(max_result, val);
@@ -17,53 +30,16 @@ void brute_force(int idx, int val) {
     char op = mexp[idx];
     int a = mexp[idx+1] - '0';
     
-    switch (op) {
-        case '+':
-            brute_force(idx+2, val+a);
-            break;
-        case '-':
-            brute_force(idx+2, val-a);
-            break;
-        case '*':
-            brute_force(idx+2, val*a);
-            break;
-        default:
-            break;
-    }
+    brute_force(idx+2, calc(val, op, a));
     
-    // 2. 괄호 하는 경우
     if (idx > N-4) return;
     
+    // 2. 괄호 하는 경우
     char op2 = mexp[idx+2];
     int b = mexp[idx+3] - '0';
+    int c = calc(a, op2, b);
     
-    switch (op2) {
-        case '+':
-            a = a + b;
-            break;
-        case '-':
-            a  = a - b;
-            break;
-        case '*':
-            a = a * b;
-            break;
-        default:
-            break;
-    }
-    
-    switch (op) {
-        case '+':
-            brute_force(idx+4, val+a);
-            break;
-        case '-':
-            brute_force(idx+4, val-a);
-            break;
-        case '*':
-            brute_force(idx+4, val*a);
-            break;
-        default:
-            break;
-    }
+    brute_force(idx+4, calc(val, op, c));
 }
 
 int main()
