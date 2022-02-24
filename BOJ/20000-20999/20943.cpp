@@ -1,3 +1,5 @@
+// 1. 기울기로 정렬
+
 #include <iostream>
 #include <algorithm>
 #include <cmath>
@@ -72,6 +74,77 @@ int main()
     for(int i=0; i<N; i++) {
         cin >> a >> b >> c;
         lines[i] = {a, b};
+    }
+    
+    cout << count_pairs();
+
+    return 0;
+}
+
+
+// 2. 맵 사용 - key를 기약분수로
+
+#include <iostream>
+#include <map>
+#include <cmath>
+
+using namespace std;
+
+typedef pair<long long, long long> pll;
+
+long long N;
+map<pll, long long> m;
+pll ZERO = {0, 0};
+pll INF = {1000000001, 1000000001};
+
+long long gcd(long long a, long long b) {
+    if (b == 0) return a;
+    
+    return gcd(b, a % b);
+}
+
+long long count_pairs() {
+    long long ret = 0;
+    
+    for(auto iter = m.begin(); iter != m.end(); iter++) {
+        ret += iter->second * (N - iter->second);
+    }
+    
+    return ret / 2;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    cin >> N;
+    
+    long long a, b, c;
+    
+    for(int i=0; i<N; i++) {
+        cin >> a >> b >> c;
+        
+        pll key;
+
+        if (a == 0) {
+            key = ZERO;
+        }
+        else if (b == 0) {
+            key = INF;
+        }
+        else {
+            long long GCD = gcd(max(a,b), min(a,b));
+            
+            a /= GCD;
+            b /= GCD;
+            
+            if (a*b < 0) key = {-abs(a), abs(b)};
+            else key = {abs(a), abs(b)};
+        }
+        
+        if (m.find(key) != m.end()) m[key]++;
+        else m[key] = 1;
     }
     
     cout << count_pairs();
