@@ -25,6 +25,7 @@
 ## 🏆 SUAPC
 
 - 2020 Winter - **15th** Place
+- 2022 Winter - **17th** Place
 
 ## 🏆 E-PPER
 
