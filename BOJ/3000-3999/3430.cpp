@@ -1,3 +1,5 @@
+// 1. 펜윅트리 사용
+
 #include <iostream>
 #include <string.h>
 
@@ -108,3 +110,81 @@ int main()
 
     return 0;
 }
+
+
+// 2. STL set lower_bound
+#include <iostream>
+#include <set>
+#include <string.h>
+#include <algorithm>
+
+using namespace std;
+
+const int MAX = 1000001;
+int N, M;
+int rain[MAX];
+int last[MAX];      // last[i] = i번째 호수에 마지막으로 비내린 날
+int drink[MAX];     // drink[i] = i번째 날에 용이 물을 마신 호수
+set<int> s;
+
+bool simulate() {
+    for (int i=1; i<=M; i++) {
+        int lake = rain[i];
+        
+        if (!lake) {
+            s.insert(i);
+        }
+        else {
+            auto lb = s.upper_bound(last[lake]);
+            
+            // 마지막으로 비가 온 날 이후로 비가 안온 날이 적어도 한번은 있어야 한다.
+            if (lb == s.end()) {  
+                return false;
+            }
+            else {
+                s.erase(lb);
+                drink[*lb] = lake;
+                last[lake] = i;
+            }
+        }
+    }
+    
+    return true;
+}
+
+void init_testcase() {
+    memset(last, -1, sizeof(last));
+    memset(drink, 0, sizeof(drink));
+    s.clear();
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int T;
+    cin >> T;
+    
+    while (T--) {
+        init_testcase();
+        
+        cin >> N >> M;
+        
+        for (int i=1; i<=M; i++) cin >> rain[i];
+        
+        if (simulate()) {
+            cout << "YES\n";
+            for (int i=1; i<=M; i++) {
+                if (!rain[i]) cout << drink[i] << " ";
+            }
+            cout << "\n";
+        }
+        else {
+            cout << "NO\n";
+        }
+    }
+
+    return 0;
+}
+
