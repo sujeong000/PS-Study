@@ -47,14 +47,11 @@ string find_x(string A, string B) {
     }
     
     // 길이가 len(A) 이하인 x를 찾지 못했으면,
-    // A를 길이가 2*len(A)+1 인 팰린드롬으로 만들어준다.
+    // 길이가 2*len(A)+1 인 팰린드롬을 만들어준다.
     reverse(A.begin(), A.end());
     
-    if (sol[A.size()+1] == "") return "a"+A;
-    else {
-        if (sol[A.size()+1] == "a"+A) return "b"+A;
-        else return min(sol[A.size()+1], "a"+A);
-    }
+    if (sol[A.size()+1] == "a"+A) return "b"+A;
+    else return min(sol[A.size()+1], "a"+A);
 }
 
 void init_testcase() {
