@@ -32,6 +32,9 @@
 - 2019-2 - **45th** Place
 - 2021-1 - **4th** Place
 
-## 🏆 Google Codejam
+## 🏆 Google Code Jam
 
 - 2021 Qualification Round - **42** Points
+
+## 🏆 Google Code Jam to I/O for Women
+- 2021 - **574th** Place
