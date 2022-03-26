@@ -38,3 +38,4 @@
 
 ## 🏆 Google Code Jam to I/O for Women
 - 2021 - **574th** Place
+- 2022 - **415th** Place
