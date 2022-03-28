@@ -15,8 +15,8 @@
 
 ## 🏆 SCPC
 
-- 2020 SCPC Round 1 - **218**/800 Points
-- 2020 SCPC Round 2 - **31**/1000 Points
+- 2020 SCPC Round 1 - **218** Points
+- 2020 SCPC Round 2 - **31** Points
 
 ## 🏆 ICPC Shinchon Algorithm Camp Contest
 
