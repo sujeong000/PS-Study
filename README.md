@@ -34,7 +34,8 @@
 
 ## 🏆 Google Code Jam
 
-- 2021 Qualification Round - **42** Points
+- 2021 Qualification Round - **8930th** Place
+- 2022 Qualification Round - **2351th** Place
 
 ## 🏆 Google Code Jam to I/O for Women
 - 2021 - **574th** Place
