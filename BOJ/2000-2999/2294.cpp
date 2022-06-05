@@ -9,7 +9,7 @@ int N, K;
 int coin[101];
 int cache[10001];
 
-// dp(price): 정확히 k원을 만드는데 필요한 동전의 최소 개수
+// dp(price): 정확히 price원을 만드는데 필요한 동전의 최소 개수
 int dp(int price) {
     if (price == 0) return 0;
     
