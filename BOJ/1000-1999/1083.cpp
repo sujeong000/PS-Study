@@ -13,15 +13,17 @@ int main()
     
     int start = 0;
     while (start < N && S > 0) {
-        // S번 이내의 스왑으로 끌어올 수 있는 가장 큰 값 끌어오기
+        // S번 이내의 스왑으로 끌어올 수 있는 가장 큰 값을 A[start]로 끌어오기
         int maxIdx = start;
         
         for (int i=start; i<=min(N-1, start+S); i++) {
             if (A[maxIdx] < A[i]) maxIdx = i;
         }
-        for (int i=maxIdx; i>start; i--) swap(A[i], A[i-1]);
+        for (int i=maxIdx; i>start; i--) {
+            swap(A[i], A[i-1]);
+            S--;
+        }
         
-        S -= maxIdx - start;
         start++;
     }
     
