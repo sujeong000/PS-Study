@@ -10,7 +10,7 @@ int N, M;
 int board[1001][1001], cache[1001][1001][3];
 int psum[1001]; // 마지막 줄 누적합
 
-// dp(r, c): 이전 칸이 before이고 현재 (r, c)일 때, (N, M)으로 가면서 얻을 수 있는 가치의 최대 합
+// dp(r, c, before): 이전 칸이 before이고 현재 (r, c)일 때, (N, M)으로 가면서 얻을 수 있는 가치의 최대 합
 int dp(int r, int c, int before) {
     if (r == N) return psum[M] - psum[c-1];
     
