@@ -8,20 +8,21 @@ int N, M;
 int board[50][50];
 int explosionCnt[4];
 
-struct MarbleCombo {
+struct MarbleGroup {
     int type;
     int cnt;
 };
 
-void pushBackMarbles(deque<MarbleCombo>& marbles, MarbleCombo mc) {
-    if (marbles.empty() || marbles.back().type != mc.type) {
-        marbles.push_back(mc);
+void pushBackMarbles(deque<MarbleGroup>& marbles, MarbleGroup mg) {
+    if (marbles.empty() || marbles.back().type != mg.type) {
+        marbles.push_back(mg);
     }
     else {
-        marbles.back().cnt += mc.cnt;
+        marbles.back().cnt += mg.cnt;
     }
 }
 
+// destoryMarbles(d, s): d방향으로 s칸 거리 이하의 구슬을 파괴한다.
 void destroyMarbles(int d, int s) {
     int dr[] = {0, -1, 1, 0, 0};
     int dc[] = {0, 0, 0, -1, 1};
@@ -32,8 +33,8 @@ void destroyMarbles(int d, int s) {
 }
 
 // emptyBoard(): 1번 칸부터 오름차순으로 덱으로 만들어 반환
-deque<MarbleCombo> emptyBoard() {
-    deque<MarbleCombo> ret;
+deque<MarbleGroup> emptyBoard() {
+    deque<MarbleGroup> ret;
     
     int dr[] = {0, 1, 0, -1};
     int dc[] = {-1, 0, 1, 0};
@@ -67,21 +68,21 @@ deque<MarbleCombo> emptyBoard() {
 }
 
 // explodeMarbles(marbles): 4개 이상 연속된 구슬이 없을 때까지 연쇄 폭발
-void explodeMarbles(deque<MarbleCombo>& marbles) {
-    deque<MarbleCombo> temp;
+void explodeMarbles(deque<MarbleGroup>& marbles) {
+    deque<MarbleGroup> temp;
     bool explode = true;
     
     while (explode) {
         explode = false;
         
         while (!marbles.empty()) {
-            auto mc = marbles.front(); marbles.pop_front();
+            auto mg = marbles.front(); marbles.pop_front();
             
-            if (mc.cnt < 4) {
-                pushBackMarbles(temp, mc);
+            if (mg.cnt < 4) {
+                pushBackMarbles(temp, mg);
             }
             else {
-                explosionCnt[mc.type] += mc.cnt;
+                explosionCnt[mg.type] += mg.cnt;
                 explode = true;
             }
         }
@@ -91,6 +92,18 @@ void explodeMarbles(deque<MarbleCombo>& marbles) {
             temp.pop_front();
         }
     }
+}
+
+// changeMarbles(marbles): 구슬 그룹을 개수와 번호 구슬로 변화시킨다.
+deque<int> changeMarbles(deque<MarbleGroup>& marbles) {
+    deque<int> ret;
+    
+    for (auto mg: marbles) {
+        ret.push_back(mg.cnt);
+        ret.push_back(mg.type);
+    }
+    
+    return ret;
 }
 
 // fillBoard(marbles): 모든 작업이 끝난 구슬들을 다시 보드에 채우기
@@ -124,14 +137,9 @@ void blizzard(int d, int s) {
     destroyMarbles(d, s);
     
     auto marbles = emptyBoard();
-    
     explodeMarbles(marbles);
     
-    deque<int> newMarbles;
-    for (auto mc: marbles) {
-        newMarbles.push_back(mc.cnt);
-        newMarbles.push_back(mc.type);
-    }
+    auto newMarbles = changeMarbles(marbles);
     fillBoard(newMarbles);
 }
 
