@@ -12,8 +12,8 @@ void postorder(int pLo, int pHi, int iLo, int iHi) {
     int root = preorder[pLo];
     int lSize = pos[root] - iLo;
     
-    postorder(pLo+1, pLo+lSize, iLo, iLo+lSize-1);
-    postorder(pLo+lSize+1, pHi, iLo+lSize+1, iHi);
+    postorder(pLo+1, pLo+lSize, iLo, pos[root]-1);
+    postorder(pLo+lSize+1, pHi, pos[root]+1, iHi);
     
     cout << root << " ";
 }
