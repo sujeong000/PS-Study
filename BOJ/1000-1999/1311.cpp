@@ -10,7 +10,7 @@ int cost[20][20];
 int cache[20][1 << 20];
 
 // dp(idx, mask)
-// :현재 일의 완료 상태가 mask일 때, idx~마지막 사람에게 일을 맡기는 최소 비용
+// :사람들의 상태가 mask일 때 idx~마지막 일까지 수행하기 위한 최소 비용
 int dp(int idx, int mask) {
     if (idx == N) return 0;
     
@@ -20,7 +20,7 @@ int dp(int idx, int mask) {
     ret = INF;
     for (int i=0; i<N; i++) {
         if ((mask & (1 << i)) != 0) continue;
-        ret = min(ret, cost[idx][i] + dp(idx+1, mask|(1 << i)));
+        ret = min(ret, cost[i][idx] + dp(idx+1, mask|(1 << i)));
     }
     
     return ret;
