@@ -5,34 +5,9 @@ using namespace std;
 
 typedef long long ll;
 
-int N;
-vector<int> divisors;
-
-int countOne(int mask) {
-    int ret = 0;
-    
-    while (mask > 0) {
-        ret += mask % 2;
-        mask /= 2;
-    }
-    
-    return ret;
-}
-
-int mul(int mask) {
-    ll ret = 1;
-    
-    for (int i=0; i<divisors.size(); i++) {
-        if ((mask & (1 << i)) != 0) {
-            ret *= divisors[i];
-            if (ret > N) return N;
-        }
-    }
-    
-    return ret;
-}
-
-void calcDivisors() {
+// 소인수분해
+vector<int> calcDivisors(int N) {
+    vector<int> divisors;
     int n = N;
     
     for (int i=2; i*i<=N; i++) {
@@ -41,24 +16,20 @@ void calcDivisors() {
     }
     
     if (n > 1) divisors.push_back(n);
+    
+    return divisors;
 }
 
-int countCoprime() {
-    calcDivisors();
+int countCoprime(int N) {
+    vector<int> divisors = calcDivisors(N);
+    int coprimeCnt = N;
     
-    int M = divisors.size();
-    int cnt = 0;
-    
-    for (int i=0; i<(1 << M); i++) {
-        if (countOne(i) % 2) cnt -= (N-1)/mul(i);
-        else cnt += (N-1)/mul(i);
+    for (auto d: divisors) {
+        coprimeCnt /= d;
+        coprimeCnt *= d-1;
     }
     
-    return cnt;
-}
-
-void initTestcase() {
-    divisors.clear();
+    return coprimeCnt;
 }
 
 int main()
@@ -68,12 +39,10 @@ int main()
     
     
     while (true) {
-        initTestcase();
-        
-        cin >> N;
+        int N; cin >> N;
         if (N == 0) break;
         
-        cout << countCoprime() << "\n";
+        cout << countCoprime(N) << "\n";
     }
 
     return 0;
