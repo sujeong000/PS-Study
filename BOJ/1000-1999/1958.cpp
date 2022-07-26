@@ -17,16 +17,7 @@ int dp(int a, int b, int c) {
         ret = 1 + dp(a+1, b+1, c+1);
     }
     else {
-        ret = 0;
-        
-        for (int i=0; i<2; i++) {
-            for (int j=0; j<2; j++) {
-                for (int k=0; k<2; k++) {
-                    if (i == 0 && j == 0 && k == 0) continue;
-                    ret = max(ret, dp(a+i, b+j, c+k));
-                }
-            }
-        }
+        ret = max(dp(a+1, b, c), max(dp(a, b+1, c), dp(a, b, c+1)));
     }
 
     return ret;
