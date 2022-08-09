@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string.h>
-#include <set>
 #include <vector>
 
 using namespace std;
@@ -8,22 +7,16 @@ using namespace std;
 int N;
 int arr[101];
 bool visit[101];
-set<int> ans;
+vector<int> ans;
 
-void DFS(int curr, vector<int> route) {
+void DFS(int curr, int start) {
     if (visit[curr]) {
-        if (route[0] == curr) {
-            for (auto node: route) {
-                ans.insert(node);
-            }
-        }
-        
+        if (start == curr) ans.push_back(curr);
         return;
     }
     
     visit[curr] = true;
-    route.push_back(curr);
-    DFS(arr[curr], route);
+    DFS(arr[curr], start);
 }
 
 int main()
@@ -37,7 +30,7 @@ int main()
     // 사이클에 속한 노드들을 전부 선택
     for (int i=1; i<=N; i++) {
         memset(visit, 0, sizeof(visit));
-        DFS(i, {});
+        DFS(i, i);
     }
     
     cout << ans.size() << "\n";
