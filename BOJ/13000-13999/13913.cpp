@@ -10,10 +10,11 @@ typedef pair<int, int> pii;
 int N, K;
 
 void BFS() {
-    map<int, pii> visit;    // visit[x] = {최단거리, 이전노드}
+    vector<int> visit(200001, -1);
+    vector<int> before(200001, -1);
     queue<int> q;
     
-    visit[N] = {0, N};
+    visit[N] = 0;
     q.push(N);
     
     while (!q.empty()) {
@@ -22,11 +23,10 @@ void BFS() {
         if (curr == K) {
             vector<int> route;
             
-            while (curr != visit[curr].second) {
+            while (curr != -1) {
                 route.push_back(curr);
-                curr = visit[curr].second;
+                curr = before[curr];
             }
-            route.push_back(N);
             
             reverse(route.begin(), route.end());
             
@@ -38,11 +38,11 @@ void BFS() {
         
         int nexts[] = {curr-1, curr+1, curr*2};
         for (auto next: nexts) {
-            if (next < 0) continue;
-            if (next > 200000) continue;
-            if (visit.find(next) != visit.end()) continue;
+            if (next < 0 || next > 200000) continue;
+            if (visit[next] != -1) continue;
             
-            visit[next] = {visit[curr].first+1, curr};
+            visit[next] = visit[curr] + 1;
+            before[next] = curr;
             q.push(next);
         }
     }
