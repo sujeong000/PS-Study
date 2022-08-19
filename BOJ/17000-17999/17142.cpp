@@ -52,16 +52,16 @@ int simulate(vector<pii> virus) {
     return ret;
 }
 
-int DFS(int idx, vector<pii> pick) {
+int bruteForce(int idx, vector<pii> pick) {
     if (idx == availables.size()) {
         return (pick.size() == M) ? simulate(pick) : INF;
     }
     
     int ret = INF;
     
-    ret = min(ret, DFS(idx+1, pick));
+    ret = min(ret, bruteForce(idx+1, pick));
     pick.push_back(availables[idx]);
-    ret = min(ret, DFS(idx+1, pick));
+    ret = min(ret, bruteForce(idx+1, pick));
     
     return ret;
 }
@@ -82,7 +82,7 @@ int main()
         }
     }
     
-    int ans = DFS(0, {});
+    int ans = bruteForce(0, {});
     
     if (ans == INF) cout << -1;
     else cout << ans;
