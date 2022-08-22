@@ -5,25 +5,17 @@ using namespace std;
 typedef pair<int, int> pii;
 
 int N;
-priority_queue<pii> arr;    // 마감일 내림차순
-priority_queue<pii> pq;     // 점수 내림차순
+vector<int> assignments[1001];
 
 int optimize() {
     int sum = 0;
+    priority_queue<int> pq;
     
-    // 미래부터 과제 정하기
+    // 시간 역순으로 가장 점수를 많이 받을 수 있는 과제를 고른다.
     for (int day=1000; day>0; day--) {
-        // 마감일이 day 이상인 과제 전부 pq에 넣기
-        while (!arr.empty() && arr.top().first >= day) {
-            pii temp = arr.top(); arr.pop();
-            swap(temp.first, temp.second);
-            pq.push(temp);
-        }
-        
-        // 가능한 과제 중 가장 점수 높은 과제 수행
+        for (auto x: assignments[day]) pq.push(x);
         if (!pq.empty()) {
-            sum += pq.top().first;
-            pq.pop();   
+            sum += pq.top(); pq.pop();
         }
     }
     
@@ -41,7 +33,7 @@ int main()
         int d, w;
         cin >> d >> w;
         
-        arr.push({d, w});
+        assignments[d].push_back(w);
     }
     
     cout << optimize();
