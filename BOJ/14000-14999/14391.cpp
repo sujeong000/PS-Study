@@ -6,7 +6,7 @@ using namespace std;
 int N, M;
 int board[4][4];
 
-bool isMarked(int r, int c, int mask) {
+bool isHorizontal(int r, int c, int mask) {
     int idx = r*M + c;
     return ((1 << idx) & mask) != 0;
 }
@@ -24,12 +24,12 @@ int calcSum(int mask) {
         
         while (nr < N && nc < M &&
                !visit[nr][nc] &&
-               isMarked(r, c, mask) == isMarked(nr, nc, mask)) {
+               isHorizontal(r, c, mask) == isHorizontal(nr, nc, mask)) {
             sum *= 10;
             sum += board[nr][nc];
             visit[nr][nc] = true;
             
-            if (isMarked(r, c, mask)) nc++; // 가로 조각
+            if (isHorizontal(r, c, mask)) nc++; // 가로 조각
             else nr++;                      // 세로 조각
         }
 
