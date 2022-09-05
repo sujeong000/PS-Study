@@ -27,6 +27,7 @@
 
 - 2020 Winter - **15th** Place
 - 2022 Winter - **17th** Place
+- 2022 Summer - **12th** Place
 
 ## 🏆 E-PPER
 
