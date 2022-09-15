@@ -22,21 +22,20 @@ int main()
     
     sort(lines.begin(), lines.end());
     
-    int len = lines[0].second - lines[0].first;
-    int e = lines[0].second;    // 제일 끝 점
+    int s = -1e9, e = -1e9;         // 현재 선분
+    int len = 0;
     
-    for (int i=1; i<N; i++) {
-        if (lines[i].second <= e) continue;
-        
-        if (e > lines[i].first) {
-            len += lines[i].second - e;
+    for (int i=0; i<N; i++) {
+        if (lines[i].first > e) {   // 새 선분 시작
+            len += e-s;
+            s = lines[i].first;
+            e = lines[i].second;
         }
-        else {
-            len += lines[i].second - lines[i].first;
+        else {                      // 기존 선분 연장
+            e = max(e, lines[i].second);
         }
-        
-        e = max(e, lines[i].second);
     }
+    len += e-s;
     
     cout << len;
 
