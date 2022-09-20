@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 typedef pair<int, int> pii;
@@ -52,48 +53,32 @@ void cancelRemove(int x, int y, int a) {
 }
 
 void remove(int x, int y, int a) {
-    vector<pii> adj_h, adj_v;
-    
     switch (a) {
         case 0:
             vertical[x][y] = false;
-            adj_v.push_back({x, y-1});
-            adj_v.push_back({x, y+1});
-            adj_h.push_back({x-1, y+1});
-            adj_h.push_back({x, y+1});
-            adj_h.push_back({x-1, y});
-            adj_h.push_back({x, y});
             break;
         case 1:
             horizontal[x][y] = false;
-            adj_v.push_back({x, y});
-            adj_v.push_back({x, y-1});
-            adj_v.push_back({x+1, y});
-            adj_v.push_back({x+1, y-1});
-            adj_h.push_back({x-1, y});
-            adj_h.push_back({x+1, y});
             break;
     }
     
-    for (auto adj: adj_h) {
-        int ax = adj.first;
-        int ay = adj.second;
-        
-        if (!validatePos(ax, ay) || !horizontal[ax][ay]) continue;
-        if (!validateHorizontal(ax, ay)) {
-            cancelRemove(x, y, a);
-            return;
-        }
-    }
+    int dx[] = {-1, 0, 1};
+    int dy[] = {-1, 0, 1};
     
-    for (auto adj: adj_v) {
-        int ax = adj.first;
-        int ay = adj.second;
-        
-        if (!validatePos(ax, ay) || !vertical[ax][ay]) continue;
-        if (!validateVertical(ax, ay)) {
-            cancelRemove(x, y, a);
-            return;
+    for (int i=0; i<3; i++) {
+        for (int j=0; j<3; j++) {
+            int ax = x + dx[i];
+            int ay = y + dy[j];
+            if (!validatePos(ax, ay)) continue;
+            
+            if (horizontal[ax][ay] && !validateHorizontal(ax, ay)) {
+                cancelRemove(x, y, a);
+                return;
+            }
+            if (vertical[ax][ay] && !validateVertical(ax, ay)) {
+                cancelRemove(x, y, a);
+                return;
+            }
         }
     }
 }
