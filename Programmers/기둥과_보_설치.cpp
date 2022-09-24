@@ -1,110 +1,86 @@
 #include <string>
 #include <vector>
-#include <iostream>
 
 using namespace std;
-typedef pair<int, int> pii;
+const int REMOVE = 0, ADD = 1;
+const int VERTICAL = 0, HORIZONTAL = 1;
 
 int N;
-bool horizontal[101][101];
-bool vertical[101][101];
+bool vertical[1001][1001];
+bool horizontal[1001][1001];
 
 bool validateVertical(int x, int y) {
     if (y == 0) return true;
-    if (x > 0 && horizontal[x-1][y]) return true;
     if (horizontal[x][y]) return true;
+    if (x > 0 && horizontal[x-1][y]) return true;
     if (y > 0 && vertical[x][y-1]) return true;
-    
     return false;
 }
 
 bool validateHorizontal(int x, int y) {
     if (y > 0 && vertical[x][y-1]) return true;
-    if (y > 0 && vertical[x+1][y-1]) return true;
-    if (x > 0 && x < N-1 && horizontal[x-1][y] && horizontal[x+1][y]) return true;
-    
+    if (x < N && y > 0 && vertical[x+1][y-1]) return true;
+    if (x > 0 && horizontal[x-1][y] && x < N && horizontal[x+1][y]) return true;
     return false;
 }
 
-void add(int x, int y, int a) {
-    switch (a) {
-        case 0:
-            if (validateVertical(x, y)) vertical[x][y] = true;
-            break;
-        case 1:
-            if (validateHorizontal(x, y)) horizontal[x][y] = true;
-            break;
+bool validateAdjacent(int x, int y) {
+    for (int i=x-1; i<=x+1; i++) {
+        for (int j=y-1; j<=y+1; j++) {
+            if (i < 0 || i > N || j < 0 || j > N) continue;
+            if (horizontal[i][j] && !validateHorizontal(i, j)) return false;
+            if (vertical[i][j] && !validateVertical(i, j)) return false;
+        }
+    }
+    return true;
+}
+
+void addVertical(int x, int y) {
+    if (validateVertical(x, y)) {
+        vertical[x][y] = true;
     }
 }
 
-bool validatePos(int x, int y) {
-    return x >= 0 && x <= N && y >= 0 && y <= N;
+void addHorizontal(int x, int y) {
+    if (validateHorizontal(x, y)) horizontal[x][y] = true;
 }
 
-void cancelRemove(int x, int y, int a) {
-    switch (a) {
-        case 0:
-            vertical[x][y] = true;
-            break;
-        case 1:
-            horizontal[x][y] = true;
-            break;
-    }
+void removeVertical(int x, int y) {
+    vertical[x][y] = false;
+    if (!validateAdjacent(x, y)) vertical[x][y] = true;
+}
+
+void removeHorizontal(int x, int y) {
+    horizontal[x][y] = false;
+    if (!validateAdjacent(x, y)) horizontal[x][y] = true;
 }
 
 void remove(int x, int y, int a) {
-    switch (a) {
-        case 0:
-            vertical[x][y] = false;
-            break;
-        case 1:
-            horizontal[x][y] = false;
-            break;
-    }
-    
-    int dx[] = {-1, 0, 1};
-    int dy[] = {-1, 0, 1};
-    
-    for (int i=0; i<3; i++) {
-        for (int j=0; j<3; j++) {
-            int ax = x + dx[i];
-            int ay = y + dy[j];
-            if (!validatePos(ax, ay)) continue;
-            
-            if (horizontal[ax][ay] && !validateHorizontal(ax, ay)) {
-                cancelRemove(x, y, a);
-                return;
-            }
-            if (vertical[ax][ay] && !validateVertical(ax, ay)) {
-                cancelRemove(x, y, a);
-                return;
-            }
-        }
-    }
+    if (a == VERTICAL) removeVertical(x, y);
+    else removeHorizontal(x, y);
+}
+
+void add(int x, int y, int a) {
+    if (a == VERTICAL) addVertical(x, y);
+    else addHorizontal(x, y);
 }
 
 vector<vector<int>> solution(int n, vector<vector<int>> build_frame) {
     vector<vector<int>> answer;
     N = n;
     
-    for (auto frame: build_frame) {
-        int x = frame[0];
-        int y = frame[1];
-        int a = frame[2];
-        int b = frame[3];
+    for (auto bf: build_frame) {
+        int x = bf[0];
+        int y = bf[1];
+        int a = bf[2];
+        int b = bf[3];
         
-        switch (b) {
-            case 0:
-                remove(x, y, a);
-                break;
-            case 1:
-                add(x, y, a);
-                break;
-        }
+        if (b == REMOVE) remove(x, y, a);
+        else add(x, y, a);
     }
     
-    for (int i=0; i<=N; i++) {
-        for (int j=0; j<=N; j++) {
+    for (int i=0; i<=n; i++) {
+        for (int j=0; j<=n; j++) {
             if (vertical[i][j]) answer.push_back({i, j, 0});
             if (horizontal[i][j]) answer.push_back({i, j, 1});
         }
