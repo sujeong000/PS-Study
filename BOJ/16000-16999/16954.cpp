@@ -25,8 +25,8 @@ bool bfs(pii from, pii to) {
         int c = q.front().c;
         q.pop();
         
-        if (board[t][r][c] == '#') continue;
         if (r == to.first && c == to.second) return true;
+        if (board[t][r][c] == '#') continue;
         
         for (int i=0; i<9; i++) {
             int nt = min(8, t + 1);
