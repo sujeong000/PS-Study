@@ -33,6 +33,7 @@
 
 - 2019-2 - **45th** Place
 - 2021-1 - **4th** Place
+- 2022-2 - **1st** Place
 
 ## 🏆 Google Code Jam
 
