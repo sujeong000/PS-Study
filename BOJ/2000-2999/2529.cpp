@@ -23,7 +23,10 @@ void updateAnswer() {
 }
 
 void backtrack(int idx) {
-    if (idx > k) updateAnswer();
+    if (idx > k) {
+        updateAnswer();
+        return;
+    }
     
     for (int i=0; i<10; i++) {
         if (is_used[i]) continue;
