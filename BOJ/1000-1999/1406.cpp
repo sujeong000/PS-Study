@@ -4,40 +4,40 @@
 
 using namespace std;
 
-stack<char> lq, rq;
+stack<char> lst, rst;
 
 void L() {
-    if (lq.empty()) return;
-    rq.push(lq.top());
-    lq.pop();
+    if (lst.empty()) return;
+    rst.push(lst.top());
+    lst.pop();
 }
 
 void D() {
-    if (rq.empty()) return;
-    lq.push(rq.top());
-    rq.pop();
+    if (rst.empty()) return;
+    lst.push(rst.top());
+    rst.pop();
 }
 
 void B() {
-    if (lq.empty()) return;
-    lq.pop();
+    if (lst.empty()) return;
+    lst.pop();
 }
 
 void P(char c) {
-    lq.push(c);
+    lst.push(c);
 }
 
 string calcString() {
     string ret = "";
     
-    while (!lq.empty()) {
-        rq.push(lq.top());
-        lq.pop();
+    while (!lst.empty()) {
+        rst.push(lst.top());
+        lst.pop();
     }
     
-    while (!rq.empty()) {
-        ret += rq.top();
-        rq.pop();
+    while (!rst.empty()) {
+        ret += rst.top();
+        rst.pop();
     }
     
     return ret;
@@ -49,7 +49,7 @@ int main() {
     
     cin >> S;
     for (auto c: S) {
-        lq.push(c);
+        lst.push(c);
     }
     
     cin >> M;
