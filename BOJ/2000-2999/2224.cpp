@@ -17,9 +17,10 @@ typedef pair<int, int> pii;
 typedef pair<ll, ll> pll;
 typedef pair<char, int> pci;
 
+const int INF = 987654321;
+
 int N;
-bool adj[52][52];
-bool visited[52];
+int dist[52][52];
 vector<pii> ans;
 
 int toInt(char c) {
@@ -32,25 +33,13 @@ char toChar(int x) {
     else return 'a' + x - 26;
 }
 
-void dfs(int curr) {
-    visited[curr] = true;
-    
-    for (int i=0; i<52; i++) {
-        if (!adj[curr][i] || visited[i]) continue;
-        dfs(i);
-    }
-}
-
-void findQ(int p) {
-    for (int i=0; i<52; i++) {
-        visited[i] = false;
-    }
-    
-    dfs(p);
-    
-    for (int q=0; q<52; q++) {
-        if (!visited[q] || q == p) continue;
-        ans.push_back({p, q});
+void floydWarshall() {
+    for (int k=0; k<52; k++) {
+        for (int i=0; i<52; i++) {
+            for (int j=0; j<52; j++) {
+                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+            }
+        }
     }
 }
 
@@ -64,15 +53,25 @@ int main()
     
     cin >> N;
     cin.ignore();
+    for (int i=0; i<52; i++) {
+        for (int j=0; j<52; j++) {
+            dist[i][j] = INF;
+        }
+    }
     for (int i=0; i<N; i++) {
         getline(cin, temp);
         p = toInt(temp[0]);
         q = toInt(temp[5]);
-        adj[p][q] = true;
+        dist[p][q] = 1;
     }
     
+    floydWarshall();
+    
     for (int i=0; i<52; i++) {
-        findQ(i);
+        for (int j=0; j<52; j++) {
+            if (dist[i][j] == INF || i == j) continue;
+            ans.push_back({i, j});
+        }
     }
     
     cout << ans.size() << "\n";
