@@ -9,7 +9,6 @@ struct Node {
 };
 
 const int MAX_N = 501;
-const int UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3;
 
 bool visited[MAX_N][MAX_N][4];
 int dr[] = {-1, 0, 1, 0};
